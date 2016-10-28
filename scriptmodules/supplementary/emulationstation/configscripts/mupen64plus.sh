@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
 # This file is part of The RetroPie Project
-#
+# 
 # The RetroPie Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
-#
-# See the LICENSE.md file at the top-level directory of this distribution and
+# 
+# See the LICENSE.md file at the top-level directory of this distribution and 
 # at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
 #
 
 function onstart_mupen64plus_joystick() {
-    local device_type="$1"
-    local device_name="$2"
+    local device_type=$1
+    local device_name=$2
 
     # write temp file header
     echo "; ${device_name}_START " > /tmp/mp64tempconfig.cfg
@@ -65,13 +65,13 @@ function map_mupen64plus_joystick() {
         x)
             keys=("C Button U")
             ;;
-        leftbottom|leftshoulder)
+        leftbottom)
             keys=("Z Trig")
             ;;
-        rightbottom|rightshoulder)
+        rightbottom)
             keys=("R Trig")
             ;;
-        lefttop|lefttrigger)
+        lefttop)
             keys=("L Trig")
             ;;
         start)
@@ -108,12 +108,6 @@ function map_mupen64plus_joystick() {
         rightanalogdown)
             keys=("C Button D")
             dir=("Down")
-            ;;
-        leftthumb)
-            keys=("Mempak switch")
-            ;;
-        rightthumb)
-            keys=("Rumblepak switch")
             ;;
         *)
             return
@@ -187,8 +181,8 @@ function map_mupen64plus_joystick() {
 }
 
 function onend_mupen64plus_joystick() {
-    local device_type="$1"
-    local device_name="$2"
+    local device_type=$1
+    local device_name=$2
 
     local bind
     local axis

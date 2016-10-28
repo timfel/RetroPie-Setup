@@ -1,27 +1,24 @@
 #!/usr/bin/env bash
 
 # This file is part of The RetroPie Project
-#
+# 
 # The RetroPie Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
-#
-# See the LICENSE.md file at the top-level directory of this distribution and
+# 
+# See the LICENSE.md file at the top-level directory of this distribution and 
 # at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
 #
 
 function onstart_retroarch_joystick() {
-    local device_type="$1"
-    local device_name="$2"
+    local device_type=$1
+    local device_name=$2
 
-    iniConfig " = " '"' "$configdir/all/retroarch.cfg"
+    iniConfig " = " "" "$configdir/all/retroarch.cfg"
     iniGet "input_joypad_driver"
     local input_joypad_driver="$ini_value"
     if [[ -z "$input_joypad_driver" ]]; then
         input_joypad_driver="udev"
     fi
-
-    _atebitdo_hack=0
-    getAutoConf "8bitdo_hack" && _atebitdo_hack=1
 
     iniConfig " = " "\"" "/tmp/tempconfig.cfg"
     iniSet "input_device" "$device_name"
@@ -29,7 +26,7 @@ function onstart_retroarch_joystick() {
 }
 
 function onstart_retroarch_keyboard() {
-    iniConfig " = " '"' "$configdir/all/retroarch.cfg"
+    iniConfig " = " "" "$configdir/all/retroarch.cfg"
 
     declare -Ag retroarchkeymap
     # SDL codes from https://wiki.libsdl.org/SDLKeycodeLookup
@@ -173,16 +170,16 @@ function map_retroarch_joystick() {
         y)
             keys=("input_y")
             ;;
-        leftbottom|leftshoulder)
+        leftbottom)
             keys=("input_l" "input_load_state")
             ;;
-        rightbottom|rightshoulder)
+        rightbottom)
             keys=("input_r" "input_save_state")
             ;;
-        lefttop|lefttrigger)
+        lefttop)
             keys=("input_l2")
             ;;
-        righttop|righttrigger)
+        righttop)
             keys=("input_r2")
             ;;
         leftthumb)
@@ -226,7 +223,7 @@ function map_retroarch_joystick() {
             ;;
     esac
 
-
+    
     local key
     local value
     for key in "${keys[@]}"; do
@@ -245,18 +242,21 @@ function map_retroarch_joystick() {
                 ;;
             *)
                 key+="_btn"
-                value="$input_id"
-
                 # workaround for mismatched controller mappings
                 iniGet "input_driver"
                 if [[ "$ini_value" == "udev" ]]; then
-                    case "$device_name" in
-                        "8Bitdo FC30"*|"8Bitdo NES30"*|"8Bitdo SFC30"*|"8Bitdo SNES30"*|"8Bitdo Zero"*)
-                            if [[ "$_atebitdo_hack" -eq 1 ]]; then
-                                value="$((input_id+11))"
+                    case "$device_name" in 
+                        "8Bitdo FC30 Pro"|"8Bitdo FC30 GamePad"|"8Bitdo FC30 II"|"8Bitdo NES30 GamePad"|"8Bitdo NES30 Pro"|"8Bitdo SFC30 GamePad"|"8Bitdo SNES30 GamePad"|"8Bitdo Zero GamePad")
+                            if [[ "$input_id" -lt "17" ]]; then
+                                value=$(($input_id+11))
                             fi
                             ;;
+                        *)
+                            value="$input_id"
+                            ;;
                     esac
+                else
+                    value="$input_id"
                 fi
                 ;;
         esac
@@ -298,16 +298,16 @@ function map_retroarch_keyboard() {
         y)
             keys=("input_player1_y")
             ;;
-        leftbottom|leftshoulder)
+        leftbottom)
             keys=("input_player1_l")
             ;;
-        rightbottom|rightshoulder)
+        rightbottom)
             keys=("input_player1_r")
             ;;
-        lefttop|lefttrigger)
+        lefttop)
             keys=("input_player1_l2")
             ;;
-        righttop|righttrigger)
+        righttop)
             keys=("input_player1_r2")
             ;;
         leftthumb)
@@ -333,8 +333,8 @@ function map_retroarch_keyboard() {
 }
 
 function onend_retroarch_joystick() {
-    local device_type="$1"
-    local device_name="$2"
+    local device_type=$1
+    local device_name=$2
 
     # hotkey sanity check
     # remove hotkeys if there is no hotkey enable button

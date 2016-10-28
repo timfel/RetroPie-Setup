@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 
 # This file is part of The RetroPie Project
-#
+# 
 # The RetroPie Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
-#
-# See the LICENSE.md file at the top-level directory of this distribution and
+# 
+# See the LICENSE.md file at the top-level directory of this distribution and 
 # at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
 #
 
 rp_module_id="samba"
 rp_module_desc="Configure Samba ROM Shares"
-rp_module_section="config"
+rp_module_menus="3+configure"
+rp_module_flags="nobin"
 
 function depends_samba() {
     getDepends samba
@@ -50,7 +51,7 @@ function install_shares_samba() {
     add_share_samba "bios" "$home/RetroPie/BIOS"
     add_share_samba "configs" "$configdir"
     add_share_samba "splashscreens" "$datadir/splashscreens"
-    restart_samba
+    restart_samba_samba
 }
 
 function remove_shares_samba() {
@@ -60,7 +61,11 @@ function remove_shares_samba() {
     done
 }
 
-function gui_samba() {
+function remove_samba() {
+    apt-get remove -y samba
+}
+
+function configure_samba() {
     while true; do
         local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option" 22 76 16)
         local options=(
@@ -68,7 +73,7 @@ function gui_samba() {
             2 "Remove RetroPie Samba shares"
             3 "Manually edit /etc/samba/smb.conf"
             4 "Restart Samba service"
-            5 "Remove Samba + configuration"
+            5 "Remove Samba service"
         )
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         if [[ -n "$choice" ]]; then
@@ -89,7 +94,7 @@ function gui_samba() {
                     rp_callModule "$md_id" restart
                     ;;
                 5)
-                    rp_callModule "$md_id" depends remove
+                    rp_callModule "$md_id" remove
                     printMsgs "dialog" "Removed Samba service"
                     ;;
             esac

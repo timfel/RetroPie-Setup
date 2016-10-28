@@ -1,22 +1,21 @@
 #!/usr/bin/env bash
 
 # This file is part of The RetroPie Project
-#
+# 
 # The RetroPie Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
-#
-# See the LICENSE.md file at the top-level directory of this distribution and
+# 
+# See the LICENSE.md file at the top-level directory of this distribution and 
 # at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
 #
 
 rp_module_id="capricerpi"
 rp_module_desc="Amstrad CPC emulator - port of Caprice32 for the RPI"
-rp_module_help="ROM Extensions: .cdt .cpc .dsk\n\nCopy your Amstrad CPC roms to $romdir/amstradcpc"
-rp_module_section="opt"
+rp_module_menus="2+"
 rp_module_flags="dispmanx !x86 !mali"
 
 function depends_capricerpi() {
-    getDepends libsdl1.2-dev libsdl-image1.2-dev libsdl-ttf2.0-dev zlib1g-dev
+    getDepends libsdl1.2-dev zlib1g-dev
 }
 
 function sources_capricerpi() {
