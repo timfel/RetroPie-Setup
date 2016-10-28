@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
 
 # This file is part of The RetroPie Project
-# 
+#
 # The RetroPie Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
-# 
-# See the LICENSE.md file at the top-level directory of this distribution and 
+#
+# See the LICENSE.md file at the top-level directory of this distribution and
 # at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
 #
 
 rp_module_id="hatari"
 rp_module_desc="Atari emulator Hatari"
-rp_module_menus="2+"
-rp_module_flags="!x86 !mali"
+rp_module_help="ROM Extensions: .st .stx .img .rom .raw .ipf .ctr\n\nCopy your Hatari roms to $romdir/atarist"
+rp_module_section="opt"
+rp_module_flags="!mali"
 
 function depends_hatari() {
     getDepends libsdl2-dev zlib1g-dev libpng12-dev cmake libreadline-dev portaudio19-dev
-    apt-get remove -y hatari
 }
 
 function sources_hatari() {
@@ -71,10 +71,7 @@ function configure_hatari() {
     mkRomDir "atarist"
 
     # move any old configs to new location
-    moveConfigDir "$home/.hatari" "$configdir/atarist"
-
-    delSystem "$md_id" "atariststefalcon"
-    delSystem "$md_id" "atarist"
+    moveConfigDir "$home/.hatari" "$md_conf_root/atarist"
 
     addSystem 1 "$md_id-fast" "atarist" "$md_inst/bin/hatari --zoom 1 --compatible 0 --timer-d 1 -w --borders 0 %ROM%"
     addSystem 0 "$md_id-fast-borders" "atarist" "$md_inst/bin/hatari --zoom 1 --compatible 0 --timer-d 1 -w --borders 1 %ROM%"
